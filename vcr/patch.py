@@ -81,8 +81,10 @@ else:
 
 try:
     import tornado.curl_httpclient
-except ImportError:  # pragma: no cover
-    pass
+except Exception as e:  # pragma: no cover
+    # pass
+    print(e.__repr__())
+    log.exception(e)
 else:
     _CurlAsyncHTTPClient_fetch_impl = tornado.curl_httpclient.CurlAsyncHTTPClient.fetch_impl
 
@@ -293,8 +295,10 @@ class CassettePatcherBuilder:
             yield simple.SimpleAsyncHTTPClient, "fetch_impl", new_fetch_impl
         try:
             import tornado.curl_httpclient as curl
-        except ImportError:  # pragma: no cover
-            pass
+        except Exception as e:  # pragma: no cover
+            # pass
+            print(e.__repr__())
+            log.exception(e)
         else:
             from .stubs.tornado_stubs import vcr_fetch_impl
 
@@ -488,8 +492,10 @@ def reset_patchers():
         yield mock.patch.object(simple.SimpleAsyncHTTPClient, "fetch_impl", _SimpleAsyncHTTPClient_fetch_impl)
     try:
         import tornado.curl_httpclient as curl
-    except ImportError:  # pragma: no cover
-        pass
+    except Exception as e:  # pragma: no cover
+        # pass
+        print(e.__repr__())
+        log.exception(e)
     else:
         yield mock.patch.object(curl.CurlAsyncHTTPClient, "fetch_impl", _CurlAsyncHTTPClient_fetch_impl)
 
