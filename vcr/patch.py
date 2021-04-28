@@ -14,6 +14,13 @@ log = logging.getLogger(__name__)
 _HTTPConnection = httplib.HTTPConnection
 _HTTPSConnection = httplib.HTTPSConnection
 
+
+def print_tornado_info(e, line):
+    print(e.__repr__())
+    log.exception(e)
+    msg = '%s : %s ; %s' % (line, str(tornado), e.__repr__())
+    raise Exception(msg)
+
 # Try to save the original types for boto3
 try:
     from botocore.awsrequest import AWSHTTPSConnection, AWSHTTPConnection
@@ -83,10 +90,12 @@ try:
     import tornado.curl_httpclient
 except Exception as e:  # pragma: no cover
     # pass
-    print(e.__repr__())
-    log.exception(e)
+    print_tornado_info(e, 93)
 else:
-    _CurlAsyncHTTPClient_fetch_impl = tornado.curl_httpclient.CurlAsyncHTTPClient.fetch_impl
+    try:
+        _CurlAsyncHTTPClient_fetch_impl = tornado.curl_httpclient.CurlAsyncHTTPClient.fetch_impl
+    except Exception as e:
+        print_tornado_info(e, 98)
 
 try:
     import aiohttp.client
@@ -297,8 +306,7 @@ class CassettePatcherBuilder:
             import tornado.curl_httpclient as curl
         except Exception as e:  # pragma: no cover
             # pass
-            print(e.__repr__())
-            log.exception(e)
+            print_tornado_info(e, 309)
         else:
             from .stubs.tornado_stubs import vcr_fetch_impl
 
@@ -494,8 +502,7 @@ def reset_patchers():
         import tornado.curl_httpclient as curl
     except Exception as e:  # pragma: no cover
         # pass
-        print(e.__repr__())
-        log.exception(e)
+        print_tornado_info(e, 505)
     else:
         yield mock.patch.object(curl.CurlAsyncHTTPClient, "fetch_impl", _CurlAsyncHTTPClient_fetch_impl)
 
