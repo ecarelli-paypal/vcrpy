@@ -14,6 +14,9 @@ log = logging.getLogger(__name__)
 _HTTPConnection = httplib.HTTPConnection
 _HTTPSConnection = httplib.HTTPSConnection
 
+print("vcr/patch.py:17", "v4.0.2_fork")
+log.info("vcr/patch.py:17", "v4.0.2_fork")
+
 
 def print_tornado_info(e, line):
     print(e.__repr__())
@@ -293,6 +296,9 @@ class CassettePatcherBuilder:
 
     @_build_patchers_from_mock_triples_decorator
     def _tornado(self):
+        print("vcr.patch.CassettePatcherBuilder._tornado", "v4.0.2_fork")
+        log.info("vcr.patch.CassettePatcherBuilder._tornado", "v4.0.2_fork")
+
         try:
             import tornado.simple_httpclient as simple
         except ImportError:  # pragma: no cover
