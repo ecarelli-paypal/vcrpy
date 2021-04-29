@@ -19,10 +19,11 @@ log.info("vcr/patch.py:17", "v4.0.2_fork")
 
 
 def print_tornado_info(e, line):
-    print(e.__repr__())
+    msg = '\n%s ; %s ; %s ; %s ; %s .\n' % ("v4.0.2_fork", "print_tornado_info", line, str(tornado), e.__repr__())
+    print(msg)
+    log.info(msg)
     log.exception(e)
-    msg = '%s : %s ; %s' % (line, str(tornado), e.__repr__())
-    raise Exception(msg)
+    # raise Exception(msg)
 
 # Try to save the original types for boto3
 try:
